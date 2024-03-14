@@ -1,0 +1,45 @@
+import weka.clusterers.ClusterEvaluation;
+import weka.clusterers.SimpleKMeans;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
+
+public class VeganFoodMarketSegmentation {
+    public static void main(String[] args) {
+        try {
+            // Load dataset
+            DataSource source = new DataSource("vegan_food_dataset.arff"); // Replace with your dataset file path
+            Instances data = source.getDataSet();
+            
+            // Configure KMeans
+            SimpleKMeans kmeans = new SimpleKMeans();
+            kmeans.setNumClusters(3); // Specify the number of clusters
+            kmeans.buildClusterer(data);
+            
+            // Evaluate clusters
+            ClusterEvaluation eval = new ClusterEvaluation();
+            eval.setClusterer(kmeans);
+            eval.evaluateClusterer(data);
+            
+            // Output cluster evaluation results
+            System.out.println("Cluster Evaluation Results:");
+            System.out.println(eval.clusterResultsToString());
+            
+            // Get cluster assignments for each instance
+            int[] assignments = kmeans.getAssignments();
+            System.out.println("\nCluster Assignments:");
+            for (int i = 0; i < assignments.length; i++) {
+                System.out.println("Instance " + i + " -> Cluster " + assignments[i]);
+            }
+            
+            // Get cluster centroids
+            Instances centroids = kmeans.getClusterCentroids();
+            System.out.println("\nCluster Centroids:");
+            for (int i = 0; i < centroids.numInstances(); i++) {
+                System.out.println("Cluster " + i + ": " + centroids.instance(i));
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
