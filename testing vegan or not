@@ -1,41 +1,33 @@
-import * as isVegan from '../src/modules/IsVegan';
+import unittest
+import is_vegan
 
-test('should be true for empty string', () => {
-  expect(isVegan.isVeganIngredient('')).toBe(true);
-});
+class TestIsVegan(unittest.TestCase):
+    def test_empty_string(self):
+        self.assertTrue(is_vegan.is_vegan_ingredient(''))
 
-test('should be vegan ingredient', () => {
-  expect(isVegan.isVeganIngredient('soy')).toBe(true);
-});
+    def test_vegan_ingredient(self):
+        self.assertTrue(is_vegan.is_vegan_ingredient('soy'))
 
-test('should NOT be vegan ingredient', () => {
-  expect(isVegan.isVeganIngredient('milk')).toBe(false);
-});
+    def test_non_vegan_ingredient(self):
+        self.assertFalse(is_vegan.is_vegan_ingredient('milk'))
 
-test('should NOT be vegan ingredient if all its words are in non-vegan list', () => {
-  expect(isVegan.isVeganIngredient('stilton cheese')).toBe(false);
-});
+    def test_non_vegan_ingredient_multiple_words(self):
+        self.assertFalse(is_vegan.is_vegan_ingredient('stilton cheese'))
 
-test('should be vegan ingredient if not all its words are in non-vegan list', () => {
-  expect(isVegan.isVeganIngredient('soy cheese')).toBe(true);
-});
+    def test_partially_vegan_ingredient_multiple_words(self):
+        self.assertTrue(is_vegan.is_vegan_ingredient('soy cheese'))
 
-test('should NOT be vegan ingredient list', () => {
-  expect(isVegan.isVeganIngredientList(['aspic', 'albumin'])).toBe(false);
-});
+    def test_non_vegan_ingredient_list(self):
+        self.assertFalse(is_vegan.is_vegan_ingredient_list(['aspic', 'albumin']))
 
-test('should be vegan ingredient list', () => {
-  expect(isVegan.isVeganIngredientList(['soy', 'cacao butter'])).toBe(true);
-});
+    def test_vegan_ingredient_list(self):
+        self.assertTrue(is_vegan.is_vegan_ingredient_list(['soy', 'cacao butter']))
 
-test('should NOT contain non-vegan ingredient list', () => {
-  expect(isVegan.containsNonVeganIngredients(['soy', 'cacao butter'])).toEqual(
-    expect.arrayContaining([])
-  );
-});
+    def test_contains_non_vegan_ingredient_list(self):
+        self.assertEqual(is_vegan.contains_non_vegan_ingredients(['soy', 'cacao butter']), [])
 
-test('should contain non-vegan ingredient list', () => {
-  expect(
-    isVegan.containsNonVeganIngredients(['aspic', 'albumin', 'soy'])
-  ).toEqual(expect.arrayContaining(['aspic', 'albumin']));
-});
+    def test_contains_non_vegan_ingredient_list(self):
+        self.assertCountEqual(is_vegan.contains_non_vegan_ingredients(['aspic', 'albumin', 'soy']), ['aspic', 'albumin'])
+
+if __name__ == '__main__':
+    unittest.main()
